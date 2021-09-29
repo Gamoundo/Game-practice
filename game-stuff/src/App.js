@@ -2,6 +2,7 @@
 import React from 'react'
 import Sketch from 'react-p5'
 import megaman from './megaman-sprite.png'
+import Score from './Score';
 
 function App() {
  let sprite;
@@ -12,7 +13,14 @@ function App() {
   let frames = []
   let frame = 0
    
- 
+  let score = 0
+
+  let timer = () => {
+      console.log(score)
+      setInterval(function () {
+          score++
+      }, 500)
+  }
  const setup = (p5, canvasParentRef) => {
     p5.createCanvas(500, 400).parent(canvasParentRef)
     getFrames(p5)
@@ -33,27 +41,40 @@ function App() {
     );
   }
 
+  timer()
+
   const draw = p5 => {
    
   //  if (sprite.length > 0) {
     
     
+
   //  }
-  p5.frameRate(10)
+  p5.frameRate(20)
    p5.background(255, 130, 20)
-  
+   p5.text('SCORE:', 10, 50); 
+   p5.text(score, 60, 50);
   const getframe = (p5) => {
     
 
-    if (frame > 4) {
+    if (frame >= 4) {
       frame = 0
 
     }
    
     
-    if (x > p5.width) {
+    if (x > p5.width || x < 0) {
       x = 0
     }
+
+    if (y > 325) {
+      y = 325
+    }
+
+    if (y < 0) {
+      y = 0
+    }
+    
     if (p5.keyCode === 39) {
       p5.image(frames[frame], x, y)
       frame++
@@ -62,17 +83,24 @@ function App() {
 
     if (p5.keyCode === 40) {
       p5.image(frames[frame], x, y)
-      frame++
+      
       y +=10
     }
 
     if (p5.keyCode === 38) {
       p5.image(frames[frame], x, y)
-      frame ++
+      
       y -=10
     }
+    if (p5.keyCode === 37) {
+      p5.image(frames[frame], x, y)
+      
+      x -=10
+    }
     else {
-      p5.image(frames[0], x, y)
+      
+      p5.image(frames[frame], x, y)
+      
     }
     
   }
